@@ -10,11 +10,15 @@ Sentry.init({
         Sentry.replayIntegration(),
     ],
     // Tracing
-    tracesSampleRate: 1.0, // Capture 100% of the transactions
-    tracePropagationTargets: ["localhost", /^https:\/\/yourserver\.io\/api/],
+    tracesSampleRate: 1.0,
+    tracePropagationTargets: [
+        "localhost",
+        "https://pwa-19v8.vercel.app",
+        /^https:\/\/pwa-19v8\.vercel\.app/
+    ],
     // Session Replay
-    replaysSessionSampleRate: 0.1, // 개발 중에는 100%로 설정하고 프로덕션에서는 낮출 수 있습니다
-    replaysOnErrorSampleRate: 1.0, // 에러 발생 시 100% 캡처
+    replaysSessionSampleRate: 0.1,
+    replaysOnErrorSampleRate: 1.0,
 });
 
 const container = document.getElementById('root');
