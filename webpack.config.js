@@ -5,7 +5,7 @@ const CopyWebpackPlugin = require('copy-webpack-plugin');
 module.exports = {
     entry: './src/index.js',
     output: {
-        path: path.resolve(__dirname, 'dist'),
+        path: path.resolve(__dirname, 'build'), // dist를 build로 변경
         filename: '[name].[contenthash].js', // 청크별로 고유한 파일 이름 생성
         publicPath: '/',
         clean: true
