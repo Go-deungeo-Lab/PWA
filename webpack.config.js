@@ -6,8 +6,9 @@ module.exports = {
     entry: './src/index.js',
     output: {
         path: path.resolve(__dirname, 'dist'),
-        filename: 'bundle.js',
-        publicPath: '/'
+        filename: '[name].[contenthash].js', // 청크별로 고유한 파일 이름 생성
+        publicPath: '/',
+        clean: true
     },
     module: {
         rules: [
@@ -29,7 +30,19 @@ module.exports = {
     },
     plugins: [
         new HtmlWebpackPlugin({
-            template: './public/index.html'
+            template: './public/index.html',
+            minify: {
+                removeComments: true,
+                collapseWhitespace: true,
+                removeRedundantAttributes: true,
+                useShortDoctype: true,
+                removeEmptyAttributes: true,
+                removeStyleLinkTypeAttributes: true,
+                keepClosingSlash: true,
+                minifyJS: true,
+                minifyCSS: true,
+                minifyURLs: true,
+            }
         }),
         new CopyWebpackPlugin({
             patterns: [
@@ -42,6 +55,23 @@ module.exports = {
             ]
         })
     ],
+    optimization: {
+        runtimeChunk: 'single',
+        splitChunks: {
+            chunks: 'all',
+            maxInitialRequests: Infinity,
+            minSize: 0,
+            cacheGroups: {
+                vendor: {
+                    test: /[\\/]node_modules[\\/]/,
+                    name(module) {
+                        const packageName = module.context.match(/[\\/]node_modules[\\/](.*?)([\\/]|$)/)[1];
+                        return `vendor.${packageName.replace('@', '')}`;
+                    },
+                },
+            },
+        },
+    },
     devServer: {
         static: {
             directory: path.join(__dirname, 'public'),
@@ -50,5 +80,12 @@ module.exports = {
         port: 3000,
         hot: true,
         historyApiFallback: true
-    }
+    },
+    resolve: {
+        extensions: ['.js', '.jsx', '.json'],
+        alias: {
+            '@': path.resolve(__dirname, 'src'),
+        }
+    },
+    mode: process.env.NODE_ENV === 'production' ? 'production' : 'development'
 };
