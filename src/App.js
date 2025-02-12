@@ -5,9 +5,11 @@ function App() {
     const [count, setCount] = useState(0);
 
     const handleClick = () => {
-        setCount(prev => prev + 1);
+        const newCount = count + 1;
+        setCount(newCount);
+
         // Sentry 테스트를 위한 에러 발생
-        if (count === 5) {
+        if (newCount === 5) {
             throw new Error("This is a test error for Sentry!");
         }
     };
@@ -19,6 +21,7 @@ function App() {
             <button onClick={handleClick}>
                 Increment
             </button>
+            <p className="info">Click 5 times to test Sentry error reporting</p>
         </div>
     );
 }
